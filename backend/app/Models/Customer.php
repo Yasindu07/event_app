@@ -10,11 +10,10 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Customer extends Authenticatable
 {
-    use HasApiTokens;
 
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\Database\Factories\CustomerFactory> */
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
