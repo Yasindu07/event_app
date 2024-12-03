@@ -18,7 +18,6 @@ Route::middleware([
     })->name('dashboard');
     Route::resource('events', EventController::class);
     Route::resource('customers', CustomerController::class);
-    
 });
 
 

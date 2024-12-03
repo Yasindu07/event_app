@@ -20,7 +20,7 @@ class RegisterController extends Controller
         $customer = Customer::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
             'created_by' => $request->name,
         ]);
 
@@ -32,6 +32,6 @@ class RegisterController extends Controller
             'message' => 'User registered successfully',
             'token' => $token,
             'user' => $customer
-        ]);
+        ], 201);
     }
 }
