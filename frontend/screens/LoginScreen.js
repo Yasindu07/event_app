@@ -6,40 +6,54 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState, useContext } from "react";
-import { FIREBASE_AUTH } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { AuthContext } from "../AuthContext";
+import { useAuth } from "../AuthContext";
 
 const LoginScreen = ({ navigation }) => {
-  const { setUser } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const auth = FIREBASE_AUTH;
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    setLoading(true)
+    setLoading(true);
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password)
-      setUser(userCredential.user);
-      if (userCredential) navigation.navigate("Welcome");
-    } catch (error) {
-      if (error.code === 'auth/invalid-credential') {
-        alert('Incorrect email or password.');
+      const response = await fetch("http://localhost:8000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Login successful", data);
+
+     
+      if (data.token && data.message === "Login successful") {
+        navigation.navigate("Welcome");
+        console.log("Login successful", data);
+        login(data.token, data.customer);
       } else {
-        alert('Sign up failed: ' + error.message);
+        Alert.alert("Error", "Login failed");
       }
+    } catch (error) {
+      Alert.alert("Error", "There was an error during login");
     }
-    setLoading(false)
+
+    setLoading(false);
   };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>My App</Text>
+        <Text style={styles.title}>EVENT_LK</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -60,8 +74,12 @@ const LoginScreen = ({ navigation }) => {
         <TouchableOpacity>
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        {loading ? (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          {loading ? (
             <ActivityIndicator size="small" color="#222" />
           ) : (
             <Text style={styles.buttonText}>Sign In</Text>
@@ -71,7 +89,12 @@ const LoginScreen = ({ navigation }) => {
       <View style={styles.footer}>
         <Text style={styles.footerText}>Don’t have an account? </Text>
         <TouchableOpacity>
-          <Text style={styles.signUp} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
+          <Text
+            style={styles.signUp}
+            onPress={() => navigation.navigate("SignUp")}
+          >
+            Sign Up
+          </Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -89,7 +112,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   title: {
     textAlign: "center",

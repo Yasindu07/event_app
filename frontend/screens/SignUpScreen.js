@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -5,18 +6,16 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  CheckBox,
   ActivityIndicator,
+  Alert,
 } from "react-native";
-import React, { useState } from "react";
-import { FIREBASE_AUTH } from '../firebase'
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { useAuth } from "../AuthContext";
 
 const SignUpScreen = ({ navigation }) => {
-  const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordCriteria, setPasswordCriteria] = useState({
     lowercase: false,
@@ -24,7 +23,7 @@ const SignUpScreen = ({ navigation }) => {
     number: false,
     minLength: false,
   });
-  const auth = FIREBASE_AUTH;
+  const [loading, setLoading] = useState(false);
 
   const validatePassword = (pwd) => {
     setPasswordCriteria({
@@ -36,34 +35,69 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const handleSignUp = async () => {
+    setLoading(true);
+  
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      Alert.alert('Error', 'Passwords do not match!');
+      setLoading(false);
       return;
     }
-    if (!passwordCriteria.lowercase || !passwordCriteria.uppercase || !passwordCriteria.number || !passwordCriteria.minLength) {
-      alert("Password does not meet the criteria");
-      return;
-    }
-    setLoading(true)
+  
     try {
-      const newUser = await createUserWithEmailAndPassword(auth, email, password)
-      await updateProfile(newUser.user, { displayName: name });
-      if (newUser) navigation.navigate("Login");
-    } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
-        alert('The email address is already in use by another account.');
-      } else {
-        alert('Sign up failed: ' + error.message);
+      const response = await fetch('http://localhost:8000/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          password_confirmation: confirmPassword,
+        }),
+      });
+  
+      // Check if the response is okay and if it's JSON
+      const responseText = await response.text();
+      let data;
+  
+      try {
+        data = JSON.parse(responseText);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        Alert.alert('Error', 'Failed to parse server response');
+        return;
       }
-      console.log(error);
+  
+      if (!response.ok) {
+        
+        Alert.alert('Error', `HTTP error! Status: ${response.status}`);
+        return;
+      }
+  
+      console.log("Response Data:", data);
+      
+      if (data.token) {
+        navigation.navigate('Welcome');
+        console.log('Registration successful:', data);
+        login(data.token, data.user);  
+      } else {
+        
+        Alert.alert('Error', data.message || 'Failed to register');
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      Alert.alert('Error', 'There was an error during registration');
     }
-    setLoading(false)
+  
+    setLoading(false);
   };
-
-  return (
+  
+  
+  return(
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>My App</Text>
+        <Text style={styles.title}>Event_LK</Text>
         <TextInput
           style={styles.input}
           placeholder="Name"
@@ -116,9 +150,9 @@ const SignUpScreen = ({ navigation }) => {
         </View>
         <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
           <>
-          {loading ? (<ActivityIndicator size="small" color="#222" />) : (
-            <Text style={styles.buttonText}>Sign Up</Text>
-          )}
+            {loading ? (<ActivityIndicator size="small" color="#222" />) : (
+              <Text style={styles.buttonText}>Sign Up</Text>
+            )}
           </>
         </TouchableOpacity>
       </View>

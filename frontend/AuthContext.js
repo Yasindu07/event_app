@@ -1,39 +1,28 @@
-import React, { createContext, useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FIREBASE_AUTH } from './firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import React, {createContext, useState, useContext} from 'react'
 
+const AuthContext = createContext();
 
-export const AuthContext = createContext();
+export const useAuth = () => {
+  return useContext(AuthContext);
+}
 
-export const AuthProvider = ({ children, navigation }) => {
+export const AuthProvider = ({children}) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
-      if (user) {
-        setUser(user);
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-      } else {
-        setUser(null);
-        await AsyncStorage.removeItem('user');
-      }
-      setLoading(false);
-    });
+  const [token, setToken] = useState(null);
 
-    return () => unsubscribe();
-  }, []);
+  const login = (token, user) => {
+    setToken(token);
+    setUser(user);
+  };
 
-  const logout = async () => {
-    await signOut(FIREBASE_AUTH);
+  const logout = () => {
+    setToken(null);
     setUser(null);
-    await AsyncStorage.removeItem('user');	
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
