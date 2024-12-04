@@ -58,8 +58,8 @@
                                                 </td>
 
                                                 <td>
-                                                    <a href="{{ route('events.edit', $event->id) }}" class="btn btn-success">Edit</a>
-                                                    <a href="{{ route('events.show', $event->id) }}" class="btn btn-info">Show</a>
+                                                    <a href="{{ route('events.edit', $event->id) }}" class="btn btn-success mb-2">Edit</a>
+                                                    <a href="{{ route('events.show', $event->id) }}" class="btn btn-info mb-2">Show</a>
                                                     <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
