@@ -32,7 +32,6 @@
                             <input type="text" name="location" class="form-control" value="{{ $event->location }}" readonly />
                         </div>
 
-                        <!-- Display the event image if it exists -->
                         @if($event->image)
                             <div class="mb-3">
                                 <label>Event Image</label><br>

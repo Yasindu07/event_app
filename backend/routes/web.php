@@ -18,6 +18,16 @@ Route::middleware([
     })->name('dashboard');
     Route::resource('events', EventController::class);
     Route::resource('customers', CustomerController::class);
+
+    // Route::group(['prefix' => 'events'], function () {
+    //     Route::get('/view', [EventController::class, 'index'])->name('events.view');
+    //     Route::get('/show/{id}', [EventController::class, 'show'])->name('events.show');
+    //     Route::get('/create', [EventController::class, 'create'])->name('events.create');  
+    //     Route::post('/store', [EventController::class, 'store'])->name('events.store');     
+    //     Route::get('/edit/{id}', [EventController::class, 'edit'])->name('events.edit');
+    //     Route::put('/update', [EventController::class, 'update'])->name('events.update');
+    //     Route::post('/delete/{id}', [EventController::class, 'destroy'])->name('events.destroy');
+    //   });
 });
 
 
