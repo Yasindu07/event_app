@@ -1,16 +1,16 @@
 <x-guest-layout>
     <div class="flex min-h-screen bg-gray-100">
         <!-- Left Side: Image -->
-        <div class="w-3/4 bg-cover bg-center" style="background-image: url('{{ asset('images/login_bg.jpg') }}');">
+        <div class="w-3/4 bg-cover bg-center" style="background-image: url('{{ asset('images/event2.jpg') }}');">
             <!-- You can add a custom logo or text if needed here -->
-        </div>
+    </div>
 
         <!-- Right Side: Login Form -->
         <div class="w-1/2 flex justify-center items-center">
             <x-authentication-card class="w-full max-w-md">
-                <x-slot name="logo">
-                    <x-authentication-card-logo />
-                </x-slot>
+                
+                <img src="{{ asset('images/logo.png') }}" alt="event Logo" class="w-10 h-auto">
+                
 
                 <x-validation-errors class="mb-4" />
 
