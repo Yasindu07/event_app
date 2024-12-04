@@ -100,4 +100,9 @@ class EventController extends Controller
         $event->delete();
         return redirect('/events')->with('status', 'Event deleted successfully.');
     }
+
+    public function showEvent(){
+        $events = Event::all();
+        return response()->json($events);
+    }
 }

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\LoginController;
 use App\Http\Controllers\Api\V1\RegisterController;
+use App\Http\Controllers\EventController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -15,3 +16,4 @@ Route::get('/test', function (Request $request) {
 
 Route::post('/register', [RegisterController::class, 'registerCustomer']);
 Route::post('/login', [LoginController::class, 'loginCustomer']);
+Route::get('/events', [EventController::class, 'showEvent']);
