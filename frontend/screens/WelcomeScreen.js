@@ -4,7 +4,6 @@ import {
   Text,
   View,
   FlatList,
-  Image,
   ActivityIndicator,
   TouchableOpacity,
   Modal,
@@ -12,72 +11,76 @@ import {
 } from 'react-native';
 
 const WelcomeScreen = ({ navigation }) => {
-  const [characters, setCharacters] = useState([]);
+  const [events, setEvents] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
-    fetchCharacters();
+    fetchEvents(); 
   }, []);
 
-  const fetchCharacters = async () => {
+  const fetchEvents = async () => {
     try {
-      const response = await fetch('https://thronesapi.com/api/v2/Characters');
+      const response = await fetch('http://localhost:8000/api/events');
       const data = await response.json();
-      setCharacters(data);
+      setEvents(data); 
     } catch (error) {
-      console.error('Error fetching characters:', error);
+      console.error('Error fetching events:', error);
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 
-  const handleCharacterPress = (character) => {
-    setSelectedCharacter(character);
+  const handleEventPress = (event) => {
+    setSelectedEvent(event);
     setModalVisible(true);
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleCharacterPress(item)} style={styles.card}>
-      <Image source={{ uri: item.imageUrl }} style={styles.image} />
+    <TouchableOpacity onPress={() => handleEventPress(item)} style={styles.card}>
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{item.fullName}</Text>
-        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.title}>{item.date}</Text>
+        <Text style={styles.title}>{item.location}</Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate("Profile")}>
-        <Text style={styles.settingsText}>⚙️</Text>
+      {/* Profile Icon Button */}
+      <TouchableOpacity 
+        style={styles.profileButton} 
+        onPress={() => navigation.navigate("Profile")}
+      >
+        <Text style={styles.profileIcon}>👤</Text>
       </TouchableOpacity>
+
       {loading ? (
         <ActivityIndicator size="large" color="#FFD700" />
       ) : (
         <FlatList
-          data={characters}
+          data={events}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.list}
         />
       )}
-      {selectedCharacter && (
+
+      {selectedEvent && (
         <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
+          onRequestClose={() => setModalVisible(!modalVisible)}
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalView}>
-              <Image source={{ uri: selectedCharacter.imageUrl }} style={styles.modalImage} />
-              <Text style={styles.modalName}>{selectedCharacter.fullName}</Text>
-              <Text style={styles.modalTitle}>Title: {selectedCharacter.title}</Text>
-              <Text style={styles.modalTitle}>Family: {selectedCharacter.family}</Text>
+              <Text style={styles.modalName}>{selectedEvent.name}</Text>
+              <Text style={styles.modalTitle}>Date: {selectedEvent.date}</Text>
+              <Text style={styles.modalTitle}>Location: {selectedEvent.location}</Text>
+              <Text style={styles.modalDescription}>{selectedEvent.description}</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
@@ -98,51 +101,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2A2A2A',
-    paddingTop: 80,
+    paddingTop: 40,
+    paddingHorizontal: 15,
   },
-  settingsButton: {
+  profileButton: {
     position: 'absolute',
-    top: 25,
-    right: 10,
+    top: 40,
+    right: 15,
     zIndex: 1,
   },
-  settingsText: {
-    fontSize: 24,
+  profileIcon: {
+    fontSize: 30,
     color: '#FFD700',
   },
   list: {
-    paddingHorizontal: 10,
+    marginTop: 70,
+    paddingBottom: 20,
   },
   card: {
     backgroundColor: '#3D3D3D',
-    borderRadius: 10,
+    borderRadius: 12,
     flexDirection: 'row',
     marginBottom: 15,
-    padding: 10,
+    padding: 15,
     alignItems: 'center',
-  },
-  image: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+    elevation: 5,
   },
   textContainer: {
     flex: 1,
   },
   name: {
     color: '#FFD700',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   title: {
     color: '#C0C0C0',
+    fontSize: 16,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   modalView: {
     margin: 20,
@@ -151,23 +156,14 @@ const styles = StyleSheet.create({
     padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 5,
   },
-  modalImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 15,
-  },
   modalName: {
     color: '#FFD700',
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -176,13 +172,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5,
   },
+  modalDescription: {
+    color: '#C0C0C0',
+    fontSize: 16,
+    marginBottom: 10,
+  },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
   },
   buttonClose: {
-    marginTop: 20,
     backgroundColor: '#FFD700',
   },
   textStyle: {
