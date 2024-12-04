@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -36,8 +37,14 @@ class EventController extends Controller
                 'date' => 'required|date',
                 'time' => 'required|date_format:H:i',
                 'location' => 'required',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]
         );
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('event_images', 'public');
+        }
 
         Event::create([
             'name' => $request->name,
@@ -45,6 +52,7 @@ class EventController extends Controller
             'date' => $request->date,
             'time' => $request->time,
             'location' => $request->location,
+            'image' => $imagePath,
         ]);
 
         return redirect('/events')->with('status', 'Event created successfully.');
@@ -75,11 +83,23 @@ class EventController extends Controller
             [
                 'name' => 'required',
                 'description' => 'required',
-                'date' => 'required|date',
-                'time' => 'required|date_format:H:i',
+                'date' => 'required|date|after_or_equal:'.now()->format('Y-m-d'),
+                'time' => 'required',
                 'location' => 'required',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]
         );
+
+        $imagePath = $event->image;
+        if ($request->hasFile('image')) {
+
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+
+
+            $imagePath = $request->file('image')->store('event_images', 'public');
+        }
 
         $event->update([
             'name' => $request->name,
@@ -87,6 +107,7 @@ class EventController extends Controller
             'date' => $request->date,
             'time' => $request->time,
             'location' => $request->location,
+            'image' => $imagePath,
         ]);
 
         return redirect('/events')->with('status', 'Event updated successfully.');
@@ -101,7 +122,8 @@ class EventController extends Controller
         return redirect('/events')->with('status', 'Event deleted successfully.');
     }
 
-    public function showEvent(){
+    public function showEvent()
+    {
         $events = Event::all();
         return response()->json($events);
     }

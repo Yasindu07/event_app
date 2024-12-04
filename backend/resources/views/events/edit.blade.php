@@ -6,12 +6,12 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Edit Events
+                        <h4>Edit Event
                             <a href="{{ url('events') }}" class="btn btn-danger float-end">Back</a>
                         </h4>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('events.update', $event->id) }}" method="POST">
+                        <form action="{{ route('events.update', $event->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
@@ -39,6 +39,23 @@
                                 <input type="text" name="location" class="form-control" value="{{ $event->location }}"/>
                                 @error('location') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
+
+                            <!-- Display the current image (if exists) -->
+                            <div class="mb-3">
+                                <label>Current Event Image</label><br>
+                                @if($event->image)
+                                    <img src="{{ asset('storage/' . $event->image) }}" width="200" alt="Event Image">
+                                @else
+                                    <p>No image available</p>
+                                @endif
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Update Event Image</label>
+                                <input type="file" name="image" class="form-control" />
+                                @error('image') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
+
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </div>

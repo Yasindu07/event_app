@@ -5,18 +5,19 @@
             {{ __('Events') }}
         </h2>
     </x-slot>
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @section('content')
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            @session('status')
-                            <div class="alert alert-success">
-                                {{ session('status') }}
-                            </div>
-                            @endsession
-            
+                            @if(session('status'))
+                                <div class="alert alert-success">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Event List
@@ -33,18 +34,29 @@
                                                 <th>Date</th>
                                                 <th>Time</th>
                                                 <th>Location</th>
+                                                <th>Image</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($events as $event )
+                                            @foreach ($events as $event)
                                             <tr>
                                                 <td>{{ $event->id }}</td>
                                                 <td>{{ $event->name }}</td>
                                                 <td>{{ $event->description }}</td>
-                                                <td>{{ $event->date}}</td>
+                                                <td>{{ $event->date }}</td>
                                                 <td>{{ $event->time }}</td>
                                                 <td>{{ $event->location }}</td>
+                                                
+                                                
+                                                <td>
+                                                    @if($event->image)
+                                                        <img src="{{ asset('storage/' . $event->image) }}" alt="Event Image" width="100" height="100">
+                                                    @else
+                                                        <span>No Image</span>
+                                                    @endif
+                                                </td>
+
                                                 <td>
                                                     <a href="{{ route('events.edit', $event->id) }}" class="btn btn-success">Edit</a>
                                                     <a href="{{ route('events.show', $event->id) }}" class="btn btn-info">Show</a>
@@ -58,7 +70,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-            
+
                                     {{ $events->links() }}
                                 </div>
                             </div>
