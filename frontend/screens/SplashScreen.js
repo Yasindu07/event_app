@@ -29,7 +29,7 @@ const SplashScreen = ({ navigation }) => {
     <View style={styles.container}> 
       <Image
         source={require('../assets/logo.png')}
-        style={[styles.logo, { transform: [{ rotate: spin }] }]} 
+        style={styles.logo}
       />
 
     </View>
