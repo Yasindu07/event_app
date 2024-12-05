@@ -63,7 +63,7 @@
                                                     <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        <button type="submit" class="btn btn-danger mb-2">Delete</button>
                                                     </form>
                                                 </td>
                                             </tr>

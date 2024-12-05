@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useAuth } from '../AuthContext';
-import { Ionicons } from '@expo/vector-icons'; // Importing Ionicons for the back icon
+import { Ionicons } from '@expo/vector-icons'; 
 
 const ProfileScreen = ({ navigation }) => {
   const { user, logout } = useAuth(); 
@@ -12,24 +12,31 @@ const ProfileScreen = ({ navigation }) => {
     }
   }, [user, navigation]); 
 
+  const handleLogout = () => {
+    logout(); 
+    navigation.navigate('Login'); 
+  };
+
   if (!user) {
     return null;
   }
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
+      
       <TouchableOpacity 
         style={styles.backButton} 
-        onPress={() => navigation.navigate('Welcome')} // Navigate to the Welcome screen
+        onPress={() => navigation.navigate('Welcome')} 
       >
-        <Ionicons name="arrow-back" size={24} color="white" />
+        <Ionicons name="arrow-back" style={styles.back_arrow} />
       </TouchableOpacity>
 
-      <Text style={styles.title}>My App</Text>
+      <Text style={styles.title}>Profile</Text>
+
+      
       <TextInput
         style={styles.input}
-        value={user.displayName || ''}
+        value={user.name || ''}
         placeholder="Name"
         placeholderTextColor="#C0C0C0"
         editable={false}
@@ -41,7 +48,9 @@ const ProfileScreen = ({ navigation }) => {
         placeholderTextColor="#C0C0C0"
         editable={false}
       />
-      <TouchableOpacity style={styles.button} onPress={logout}>
+
+      
+      <TouchableOpacity style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Log out</Text>
       </TouchableOpacity>
     </View>
@@ -53,41 +62,48 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#2A2A2A',
+    backgroundColor: '#fff',  
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
   backButton: {
     position: 'absolute',
+    color: '#030303',
     top: 40,
     left: 15,
     zIndex: 1,
   },
   title: {
-    color: 'white',
+    color: '#353535',  
     fontSize: 24,
-    marginBottom: 20,
+    fontWeight: 'bold',
+    marginBottom: 30,
   },
   input: {
-    backgroundColor: '#3D3D3D',
-    color: 'white',
+    backgroundColor: '#afafaf', 
+    color: '#353535',  
     width: '100%',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 10,
     marginBottom: 15,
+    fontSize: 16,
   },
   button: {
-    backgroundColor: '#FFD482',
+    backgroundColor: '#353535',  
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 10,
     width: '100%',
     alignItems: 'center',
     marginTop: 20,
   },
   buttonText: {
-    color: '#222',
+    color: '#fefefe',  
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  back_arrow: {
+    color: "#FFD482",
+    fontSize: 40,
   },
 });

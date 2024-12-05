@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Image,
 } from "react-native";
 import { useAuth } from "../AuthContext";
 
@@ -57,7 +58,6 @@ const SignUpScreen = ({ navigation }) => {
         }),
       });
   
-      // Check if the response is okay and if it's JSON
       const responseText = await response.text();
       let data;
   
@@ -70,7 +70,6 @@ const SignUpScreen = ({ navigation }) => {
       }
   
       if (!response.ok) {
-        
         Alert.alert('Error', `HTTP error! Status: ${response.status}`);
         return;
       }
@@ -82,7 +81,6 @@ const SignUpScreen = ({ navigation }) => {
         console.log('Registration successful:', data);
         login(data.token, data.user);  
       } else {
-        
         Alert.alert('Error', data.message || 'Failed to register');
       }
     } catch (error) {
@@ -92,12 +90,11 @@ const SignUpScreen = ({ navigation }) => {
   
     setLoading(false);
   };
-  
-  
+
   return(
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>Event_LK</Text>
+        <Image source={require("../assets/logo.png")} style={styles.logo} />
         <TextInput
           style={styles.input}
           placeholder="Name"
@@ -149,11 +146,9 @@ const SignUpScreen = ({ navigation }) => {
           </Text>
         </View>
         <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
-          <>
-            {loading ? (<ActivityIndicator size="small" color="#222" />) : (
-              <Text style={styles.buttonText}>Sign Up</Text>
-            )}
-          </>
+          {loading ? (<ActivityIndicator size="small" color="#222" />) : (
+            <Text style={styles.buttonText}>Sign Up</Text>
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.footer}>
@@ -171,7 +166,7 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: "#fff",
     justifyContent: "center",
     padding: 20,
   },
@@ -179,22 +174,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  title: {
-    textAlign: 'center',
-    color: "white",
-    fontSize: 24,
+  logo: {
+    width: 200,
+    height: 200,
     marginBottom: 20,
+    alignSelf: 'center',
   },
   input: {
     backgroundColor: "#3D3D3D",
-    color: "white",
+    color: "#fff",
     width: "100%",
     padding: 15,
     borderRadius: 5,
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "#FFD482",
+    backgroundColor: "#dbdbdb",
     padding: 15,
     borderRadius: 5,
     width: "100%",
@@ -213,16 +208,16 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   footerText: {
-    color: "white",
+    color: "#353535",
   },
   signIn: {
-    color: "#FFD482",
+    color: "#dbdbdb",
   },
   passwordCriteriaContainer: {
     alignSelf: "flex-start",
     marginBottom: 20,
   },
   passwordCriteriaText: {
-    color: "#888",
+    color: "#C0C0C0", 
   },
 });

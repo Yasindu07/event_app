@@ -123,8 +123,17 @@ class EventController extends Controller
     }
 
     public function showEvent()
-    {
-        $events = Event::all();
-        return response()->json($events);
+{
+    $events = Event::all();
+
+    
+    foreach ($events as $event) {
+        if ($event->image) {
+            $event->imageUrl = Storage::url($event->image);
+        }
     }
+
+    return response()->json($events);
+}
+
 }

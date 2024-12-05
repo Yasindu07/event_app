@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Animated } from "react-native";
+import { StyleSheet, View, Animated, Image } from "react-native";
 import React, { useEffect, useRef } from "react";
 
 const SplashScreen = ({ navigation }) => {
@@ -26,8 +26,12 @@ const SplashScreen = ({ navigation }) => {
     outputRange: ["0deg", "360deg"],
   });
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>My App</Text>
+    <View style={styles.container}> 
+      <Image
+        source={require('../assets/logo.png')}
+        style={[styles.logo, { transform: [{ rotate: spin }] }]} 
+      />
+
     </View>
   );
 };
@@ -37,12 +41,12 @@ export default SplashScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
-    color: "white",
-    fontSize: 20,
+  logo: {
+    width: 300,
+    height: 300,
   },
 });
