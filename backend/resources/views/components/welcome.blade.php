@@ -1,22 +1,22 @@
 <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-    <!-- Replace with Mage Logo -->
+    
     <div class="shrink-0 flex items-center justify-center">
         <a href="{{ route('events.index') }}">
             <img src="{{ asset('images/logo.png') }}" alt="Mage Logo" class="block h-24 w-auto" />
         </a>
     </div>
 
-    <!-- Description about Event Management -->
+    
     <h1 class="mt-8 text-2xl font-medium text-gray-900">
         Welcome to EventLK!
     </h1>
 
     <p class="mt-6 text-gray-500 leading-relaxed">
-        EventLK is a powerful platform designed to help you organize, manage, and track events seamlessly. Whether you are hosting a conference, a seminar, or a social gathering, Mage provides all the tools you need to ensure your event runs smoothly. Our user-friendly interface allows you to easily create events, manage attendees, and collaborate with your team. Experience the simplicity and efficiency of Mage as you bring your events to life!
+        EventLK is a powerful platform designed to help you organize, manage, and track events seamlessly. Whether you are hosting a conference, a seminar, or a social gathering, EventLK provides all the tools you need to ensure your event runs smoothly. Our user-friendly interface allows you to easily create events, manage attendees, and collaborate with your team. Experience the simplicity and efficiency of EventLK as you bring your events to life!
     </p>
 </div>
 
-<!-- Event Management Features Section -->
+
 <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
     <div>
         <div class="flex items-center">
@@ -29,7 +29,7 @@
         </div>
 
         <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-            Easily create and manage events with Mage. Our platform allows you to set up event details, schedules, and locations in just a few clicks. Perfect for all types of events, large or small.
+            Easily create and manage events with EventLK. Our platform allows you to set up event details, schedules, and locations in just a few clicks. Perfect for all types of events, large or small.
         </p>
     </div>
 
@@ -44,7 +44,7 @@
         </div>
 
         <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-            Mage offers comprehensive tools to manage attendees, send invitations, track RSVPs, and communicate with your event participants, all from one place. Ensure smooth interactions with your guests.
+            EventLK offers comprehensive tools to manage attendees, send invitations, track RSVPs, and communicate with your event participants, all from one place. Ensure smooth interactions with your guests.
         </p>
     </div>
 
@@ -59,7 +59,7 @@
         </div>
 
         <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-            Mage provides in-depth analytics, allowing you to track event success, monitor attendee engagement, and gather feedback. Make data-driven decisions to improve future events.
+            EventLK provides in-depth analytics, allowing you to track event success, monitor attendee engagement, and gather feedback. Make data-driven decisions to improve future events.
         </p>
     </div>
 
